@@ -75,7 +75,7 @@
   #:use-module (guix build-system ruby)
   #:use-module ((srfi srfi-1) #:select (alist-delete)))
 
-(define-public ruby
+(define-public ruby-2.5
   (package
     (name "ruby")
     (version "2.5.3")
@@ -131,7 +131,7 @@ a focus on simplicity and productivity.")
 
 (define-public ruby-2.7
   (package
-    (inherit ruby)
+    (inherit ruby-2.5)
     (version "2.7.1")
     (source
      (origin
@@ -171,7 +171,7 @@ a focus on simplicity and productivity.")
     (native-inputs
      `(("autoconf" ,autoconf)))))
 
-(define-public ruby-2.5 ruby)
+(define-public ruby ruby-2.7)
 
 (define-public ruby-2.4
   (package
