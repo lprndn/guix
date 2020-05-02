@@ -171,6 +171,8 @@ a focus on simplicity and productivity.")
     (native-inputs
      `(("autoconf" ,autoconf)))))
 
+(define-public ruby-2.5 ruby)
+
 (define-public ruby-2.4
   (package
     (inherit ruby)
