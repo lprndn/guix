@@ -1,5 +1,6 @@
 ;;; GNU Guix --- Functional package management for GNU
 ;;; Copyright © 2020 Ryan Prior <rprior@protonmail.com>
+;;; Copyright © 2020 L  p R n  d n <guix@lprndn.info>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -17,6 +18,8 @@
 ;;; along with GNU Guix.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-module (gnu packages pantheon)
+  #:use-module (gnu packages autotools)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gettext)
@@ -25,8 +28,11 @@
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages python)
+  #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages)
+  #:use-module (guix build-system gnu)
   #:use-module (guix build-system meson)
   #:use-module (guix git-download)
   #:use-module ((guix licenses) :prefix license:)
@@ -69,6 +75,67 @@
 things, it provides complex widgets and convenience functions designed for use
 in apps built for the Pantheon desktop.")
     (license license:lgpl3+)))
+
+(define-public bamf
+  (package
+    (name "bamf")
+    (version "0.5.4")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://git.launchpad.net/~unity-team/bamf")
+                    ;; 0.5.4
+                    (commit "054fbdf625c4c559f74673662e7b595b144ce468")))
+              (sha256 (base32
+                       "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz"))
+              (patches (search-patches "bamf-use-python3-lxml.patch"))))
+    (build-system gnu-build-system)
+    (arguments
+     `(#:tests? #f
+       #:configure-flags
+       (list "--enable-gtk-doc"
+             ;; Glib 2.62. Taken from NixOS
+             "CFLAGS=-DGLIB_DISABLE_DEPRECATION_WARNINGS")
+       #:make-flags
+       (list (string-append "INTROSPECTION_GIRDIR="
+                            (assoc-ref %outputs "out")
+                            "/share/gir-1.0/")
+             (string-append "INTROSPECTION_TYPELIBDIR="
+                            (assoc-ref %outputs "out")
+                            "/lib/girepository-1.0"))
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'configure 'fix-hardcoded-paths
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (substitute* "data/Makefile"
+                 (("/usr/lib/systemd/user")
+                  (string-append out "/lib/systemd/user")))
+               #t))))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("gobject-introspection" ,gobject-introspection)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("python" ,python-wrapper)
+       ("python-lxml" ,python-lxml)
+       ("which" ,which)
+       ("gnome-common" ,gnome-common)
+       ("automake" ,automake)
+       ("autoconf" ,autoconf)
+       ("libtool" ,libtool)
+       ("gtk-doc" ,gtk-doc)))
+    (inputs
+     `(("libgtop" ,libgtop)
+       ("libwnck" ,libwnck)
+       ("startup-notification" ,startup-notification)))
+    (home-page "https://launchpad.net/bamf")
+    (synopsis "Application matching framework")
+    (description "Removes the headache of applications matching
+ into a simple DBus daemon and c wrapper library.")
+    (license (list license:gpl3
+                   license:lgpl3
+                   license:lgpl2.1))))
 
 (define-public pantheon-calculator
   (package
