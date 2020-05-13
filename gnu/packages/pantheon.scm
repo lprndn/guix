@@ -456,3 +456,46 @@ for elementary OS and its desktop environment: Pantheon.")
     (description "A window & compositing manager
 based on libmutter and designed by elementary for use with Pantheon.")
     (license license:gpl3)))
+
+(define-public wingpanel
+  (package
+    (name "wingpanel")
+    ;; 2.3.1 fails with our gnome 3.34 (at least)
+    ;; probably incompatible vapi file
+    (version "2.3.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://github.com/elementary/wingpanel/archive/"
+                                  version ".tar.gz"))
+              (sha256 (base32
+                       "1mw36azmzkj9hh6zbwqxlxh8f9l2h4dfdwrk9vkxynxw2a0ayl2a"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-indicators-dir
+           (lambda* (#:key outputs #:allow-other-keys)
+             (substitute* "meson.build"
+               (("get_option\\('prefix'\\), get_option\\('libdir'\\)")
+                "'/run/current-system/profile/lib'"))
+             #t)))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)
+       ("glib:bin" ,glib "bin")
+       ("gala" ,gala)))
+    (inputs
+     `(("granite" ,granite)
+       ("gtk+" ,gtk+)
+       ("json-glib" ,json-glib)
+       ("libgee" ,libgee)
+       ("mutter" ,mutter)))
+    (home-page "https://github.com/elementary/wingpanel")
+    (synopsis "Top panel that holds indicators and spawns an application launcher")
+    (description "The extensible top panel for Pantheon.
+It is an empty container that accepts indicators as extensions,
+including the applications menu.")
+    (license license:gpl3)))
