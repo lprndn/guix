@@ -30,10 +30,13 @@
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages xdisorg)
+  #:use-module (gnu packages xorg)
   #:use-module (gnu packages xml)
   #:use-module (gnu packages)
+  #:use-module (guix build-system glib-or-gtk)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system meson)
+  #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module ((guix licenses) :prefix license:)
   #:use-module (guix packages)
@@ -275,3 +278,50 @@ download.")
 Comes with sane defaults, browser-like tabs, sudo paste protection, smart
 copy/paste, and little to no configuration.")
     (license license:lgpl3)))
+
+(define-public plank
+  (package
+    (name "plank")
+    (version "0.11.89")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://launchpad.net/plank/1.0/" version
+                    "/+download/plank-" version ".tar.xz"))
+              (sha256 (base32
+                       "17cxlmy7n13jp1v8i4abxyx9hylzb39andhz3mk41ggzmrpa8qm6"))))
+    (build-system glib-or-gtk-build-system)
+    (arguments
+     `(#:tests? #f
+       #:make-flags
+       (list (string-append "INTROSPECTION_GIRDIR="
+                            (assoc-ref %outputs "out")
+                            "/share/gir-1.0/")
+             (string-append "INTROSPECTION_TYPELIBDIR="
+                            (assoc-ref %outputs "out")
+                            "/lib/girepository-1.0"))))
+    (native-inputs
+     `(("vala" ,vala)
+       ("pkg-config" ,pkg-config)
+       ("intltool" ,intltool)
+       ("libxml2" ,libxml2)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("bamf" ,bamf)
+       ("cairo" ,cairo)
+       ("gdk-pixbuf" ,gdk-pixbuf)
+       ("glib:bin" ,glib "bin")
+       ("gnome-menus" ,gnome-menus)
+       ("libdbusmenu" ,libdbusmenu)
+       ("gtk+" ,gtk+)
+       ("libx11" ,libx11)
+       ("libxfixes" ,libxfixes)
+       ("libxi" ,libxi)
+       ("libgee" ,libgee)
+       ("libwnck" ,libwnck)))
+    (home-page "https://launchpad.net/plank")
+    (synopsis "Simple dock application")
+    (description "Simple dock application.  It is, however, a library
+ which can be extended to create other dock programs with more advanced features.")
+    (license (list license:gpl3+
+                   license:lgpl2.1+))))
