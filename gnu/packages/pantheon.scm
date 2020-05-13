@@ -26,6 +26,7 @@
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages inkscape)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
@@ -365,3 +366,33 @@ copy/paste, and little to no configuration.")
    (description "An original Gtk.CSS stylesheet designed specifically
 for elementary OS and its desktop environment: Pantheon.")
    (license license:gpl3)))
+
+(define-public elementary-icon-theme
+  (package
+    (name "elementary-icon-theme")
+    (version "5.3.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://github.com/elementary/icons/archive/"
+                                  version ".tar.gz"))
+              (sha256 (base32
+                       "04lyqlbyiw5cvlcbqb7jgji26k5g9ipxkf0vaacy74497x2lkcv7"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:configure-flags
+       (list "-Dvolume_icons=false")))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("gettext" ,gettext-minimal)
+       ("inkscape" ,inkscape)
+       ("xcursorgen" ,xcursorgen)
+       ("librsvg" ,librsvg)))
+    (inputs
+     `(("gtk+" ,gtk+)))
+    (propagated-inputs
+     `(("hicolor-icon-theme" ,hicolor-icon-theme)))
+    (home-page "https://github.com/elementary/icons")
+    (synopsis "Named, vector icons for elementary OS")
+    (description "An original set of vector icons designed
+ specifically for elementary OS and its desktop environment: Pantheon.")
+    (license license:gpl3)))
