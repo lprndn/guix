@@ -346,3 +346,22 @@ copy/paste, and little to no configuration.")
     (description "Collection of wallpapers from elementary OS.")
     ;; TODO: Add unsplash license
     (license license:public-domain)))
+
+(define-public elementary-gtk-theme
+  (package
+   (name "elementary-gtk-theme")
+   (version "5.4.2")
+   (source (origin
+             (method url-fetch)
+             (uri (string-append "https://github.com/elementary/stylesheet/archive/"
+                                version ".tar.gz" ))
+            (sha256 (base32
+                     "1v7038xa5m47xj41762lcs6zxbsm03pjbhg4kiy0pkplv8ipghrv"))))
+   (native-inputs
+    `(("gettext" ,gettext-minimal)))
+   (build-system meson-build-system)
+   (home-page "https://github.com/elementary/stylesheet")
+   (synopsis "Gtk Stylesheet for elementary OS")
+   (description "An original Gtk.CSS stylesheet designed specifically
+for elementary OS and its desktop environment: Pantheon.")
+   (license license:gpl3)))
