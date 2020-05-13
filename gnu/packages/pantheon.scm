@@ -33,6 +33,7 @@
   #:use-module (gnu packages libcanberra)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xorg)
@@ -540,3 +541,37 @@ including the applications menu.")
    (description "Switchboard is just the container application for Switchboard Plugs,
 which provide the actual settings for various hardware and software.")
    (license license:lgpl2.1)))
+
+(define-public wingpanel-indicator-sound
+  (package
+    (name "wingpanel-indicator-sound")
+    (version "2.1.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/wingpanel-indicator-sound/archive/"
+                    version ".tar.gz"))
+              (sha256 (base32
+                       "05i45znsx2s4dwvznb68g35bqc8wkc1gh6416aid7q21ih087630"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("gettext" ,gettext-minimal)
+       ("libxml2" ,libxml2)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("pulseaudio" ,pulseaudio)
+       ("wingpanel" ,wingpanel)
+       ("libcanberra" ,libcanberra)
+       ("libnotify" ,libnotify)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)))
+    (home-page "https://github.com/elementary/wingpanel-indicator-sound")
+    (synopsis "Wingpanel Sound Indicator")
+    (description "Wingpanel Sound Indicator.")
+    (license license:gpl3)))
