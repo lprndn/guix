@@ -31,6 +31,7 @@
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages inkscape)
   #:use-module (gnu packages libcanberra)
+  #:use-module (gnu packages linux)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages pulseaudio)
@@ -667,3 +668,37 @@ which provide the actual settings for various hardware and software.")
     (synopsis "A Wingpanel indicator for Night Light")
     (description "A Wingpanel indicator for Night Light.")
     (license license:gpl2)))
+
+(define-public wingpanel-indicator-power
+  (package
+    (name "wingpanel-indicator-power")
+    (version "2.1.5")
+    (source (origin
+              (method url-fetch)
+              (uri
+               (string-append
+                "https://github.com/elementary/wingpanel-indicator-power/archive/"
+                version ".tar.gz"))
+              (sha256 (base32
+                       "1m3ac5rqx268d4j2377288a6hc91dd86z8akf3kkaka8f3fqh3wb"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("bamf" ,bamf)
+       ("granite" ,granite)
+       ("libgtop" ,libgtop)
+       ("eudev" ,eudev)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("wingpanel" ,wingpanel)))
+    (home-page "https://github.com/elementary/wingpanel-indicator-power")
+    (synopsis "Wingpanel Power Indicator")
+    (description "Wingpanel Power Indicator.")
+    (license license:gpl3)))
