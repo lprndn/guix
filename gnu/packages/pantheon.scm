@@ -766,3 +766,37 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Wingpanel Notifications Indicator")
    (description "Wingpanel Notifications Indicator.")
    (license license:lgpl2.1)))
+
+(define-public wingpanel-indicator-keyboard
+  (package
+   (name "wingpanel-indicator-keyboard")
+   (version "2.2.1")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/wingpanel-indicator-keyboard/archive/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "18fk8qlk1s4nzyl0fmqjx66hhvn864mwjcn9664c5c6g2i4fpr3v"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("libxml2" ,libxml2)
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection" ,gobject-introspection)))
+   (inputs
+    `(("granite" ,granite)
+      ("libgnomekbd" ,libgnomekbd)
+      ("xkeyboard-config" ,xkeyboard-config)
+      ("gtk+" ,gtk+)
+      ("libgee" ,libgee)
+      ("wingpanel" ,wingpanel)))
+   (home-page "https://github.com/elementary/wingpanel-indicator-notifications")
+   (synopsis "Wingpanel Keyboard Indicator")
+   (description "Wingpanel Keyboard Indicator.")
+   (license license:gpl3)))
