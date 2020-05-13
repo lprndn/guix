@@ -499,3 +499,44 @@ based on libmutter and designed by elementary for use with Pantheon.")
 It is an empty container that accepts indicators as extensions,
 including the applications menu.")
     (license license:gpl3)))
+
+(define-public switchboard
+  (package
+   (name "switchboard")
+   (version "2.4.0")
+   (source (origin
+             (method url-fetch)
+             (uri (string-append "https://github.com/elementary/switchboard/archive/"
+                                 version ".tar.gz"))
+             (sha256 (base32
+                      "1crz8gkw6fqzijw2qf7zq1g0cdyrgpx3j21lm6l8rj7ly8v0nz7m"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t
+      #:phases
+      (modify-phases %standard-phases
+        (add-after 'unpack 'wrap-program
+          (lambda* (#:key outputs #:allow-other-keys)
+            (substitute* "meson.build"
+              (("get_option\\('prefix'\\), get_option\\('libdir'\\)")
+               "'/run/current-system/profile/lib'")))))))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (propagated-inputs
+    `(("glib" ,glib)
+      ("gtk+" ,gtk+)
+      ("libgee" ,libgee)))
+   (inputs
+    `(("libgee" ,libgee)
+      ("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("clutter-gtk" ,clutter-gtk)))
+   (home-page "https://github.com/elementary/switchboard")
+   (synopsis "Extensible System Settings app designed for elementary OS")
+   (description "Switchboard is just the container application for Switchboard Plugs,
+which provide the actual settings for various hardware and software.")
+   (license license:lgpl2.1)))
