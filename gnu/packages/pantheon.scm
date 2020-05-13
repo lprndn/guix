@@ -636,3 +636,34 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Wingpanel Session Indicator")
     (description "Wingpanel Session Indicator.")
     (license license:gpl2+)))
+
+(define-public wingpanel-indicator-nightlight
+  (package
+    (name "wingpanel-indicator-nightlight")
+    (version "2.0.3")
+    (source (origin
+              (method url-fetch)
+              (uri
+               (string-append
+                "https://github.com/elementary/wingpanel-indicator-nightlight/archive/"
+                version ".tar.gz"))
+              (sha256 (base32
+                       "0w2ykx8d9ndq20f529i2mmiv194bcnzia6j91k94l8mv7p6vq7ab"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("granite" ,granite)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("wingpanel" ,wingpanel)))
+    (home-page "https://github.com/elementary/wingpanel-indicator-nightlight")
+    (synopsis "A Wingpanel indicator for Night Light")
+    (description "A Wingpanel indicator for Night Light.")
+    (license license:gpl2)))
