@@ -702,3 +702,35 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Wingpanel Power Indicator")
     (description "Wingpanel Power Indicator.")
     (license license:gpl3)))
+
+(define-public wingpanel-indicator-bluetooth
+  (package
+   (name "wingpanel-indicator-bluetooth")
+   (version "2.1.5")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/wingpanel-indicator-bluetooth/archive/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "0l80ypcxpnk7qk6p0g5dnygf97px16ffhz71nn2l80w1019mf341"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection" ,gobject-introspection)))
+   (inputs
+    `(("libnotify" ,libnotify)
+      ("granite" ,granite)
+      ("gtk+" ,gtk+)
+      ("libgee" ,libgee)
+      ("wingpanel" ,wingpanel)))
+   (home-page "https://github.com/elementary/wingpanel-indicator-bluetooth")
+   (synopsis "Wingpanel Bluetooth Indicator")
+   (description "Wingpanel Bluetooth Indicator.")
+   (license license:lgpl2.1)))
