@@ -575,3 +575,34 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Wingpanel Sound Indicator")
     (description "Wingpanel Sound Indicator.")
     (license license:gpl3)))
+
+(define-public wingpanel-indicator-network
+  (package
+    (name "wingpanel-indicator-network")
+    (version "2.2.3")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/wingpanel-indicator-sound/archive/"
+                    version ".tar.gz"))
+              (sha256 (base32
+                       "0yysaw1v7xs3pyp026nc5lpqkfmdnc9mknl1ad3gcg5khmdpfnn1"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("granite" ,granite)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("network-manager" ,network-manager)
+       ("network-manager-applet" ,network-manager-applet)
+       ("wingpanel" ,wingpanel)))
+    (home-page "https://github.com/elementary/wingpanel-indicator-network")
+    (synopsis "Wingpanel Network Indicator")
+    (description "Wingpanel Network Indicator.")
+    (license license:lgpl2.1)))
