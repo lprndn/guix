@@ -734,3 +734,35 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Wingpanel Bluetooth Indicator")
    (description "Wingpanel Bluetooth Indicator.")
    (license license:lgpl2.1)))
+
+(define-public wingpanel-indicator-notifications
+  (package
+   (name "wingpanel-indicator-notifications")
+   (version "2.1.4")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/wingpanel-indicator-notifications/archive/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "1kjmaql9gmqlkmzk9vr9gxqx5hkbhd0b76cns1izbvnk337wrw2l"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection" ,gobject-introspection)))
+   (inputs
+    `(("libwnck" ,libwnck)
+      ("granite" ,granite)
+      ("gtk+" ,gtk+)
+      ("libgee" ,libgee)
+      ("wingpanel" ,wingpanel)))
+   (home-page "https://github.com/elementary/wingpanel-indicator-notifications")
+   (synopsis "Wingpanel Notifications Indicator")
+   (description "Wingpanel Notifications Indicator.")
+   (license license:lgpl2.1)))
