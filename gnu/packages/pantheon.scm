@@ -606,3 +606,33 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Wingpanel Network Indicator")
     (description "Wingpanel Network Indicator.")
     (license license:lgpl2.1)))
+
+(define-public wingpanel-indicator-session
+  (package
+    (name "wingpanel-indicator-session")
+    (version "2.2.8")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/wingpanel-indicator-session/archive/"
+                    version ".tar.gz"))
+              (sha256 (base32
+                       "0sg411k0ql70ny4jmhjdrjj8sz5g080fpsjc67xgynav49sh1jc4"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("accountsservice" ,accountsservice)
+       ("granite" ,granite)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("wingpanel" ,wingpanel)))
+    (home-page "https://github.com/elementary/wingpanel-indicator-session")
+    (synopsis "Wingpanel Session Indicator")
+    (description "Wingpanel Session Indicator.")
+    (license license:gpl2+)))
