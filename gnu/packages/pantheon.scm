@@ -20,13 +20,17 @@
 (define-module (gnu packages pantheon)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
+<<<<<<< HEAD
   #:use-module (gnu packages cmake)
+=======
+>>>>>>> 723f4bebc2... gnu: Add gala.
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages inkscape)
+  #:use-module (gnu packages libcanberra)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
@@ -395,4 +399,60 @@ for elementary OS and its desktop environment: Pantheon.")
     (synopsis "Named, vector icons for elementary OS")
     (description "An original set of vector icons designed
  specifically for elementary OS and its desktop environment: Pantheon.")
+    (license license:gpl3)))
+
+(define-public gala
+  (package
+    (name "gala")
+    (version "3.3.2")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://github.com/elementary/gala/archive/"
+                                  version ".tar.gz"))
+              (sha256 (base32
+                       "14l1qqsl66snbrrkhdfwsrpfm658h3vyq1m3zwpm50gxzn0hmciz"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-plugins-dir
+           (lambda _
+             (substitute* "meson.build"
+               (("'PLUGINDIR', plugins_dir")
+                "'PLUGINDIR', '/run/current-system/profile/lib/gala/plugins'")))))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("gettext" ,gettext-minimal)
+       ("desktop-file-utils" ,desktop-file-utils)
+       ("gobject-introspection" ,gobject-introspection)
+       ("libxml2" ,libxml2)
+       ("glib:bin" ,glib "bin")
+       ("gtk+:bin" ,gtk+ "bin")))
+    (inputs
+     `(("atk" ,atk)
+       ("cairo" ,cairo)
+       ("glib" ,glib)
+       ("wayland" ,wayland)
+       ("libxfixes" ,libxfixes)
+       ("xorg-server" ,xorg-server)
+       ("gdk-pixbuf" ,gdk-pixbuf)
+       ("json-glib" ,json-glib)
+       ("pango" ,pango)
+       ;;
+       ("bamf" ,bamf)
+       ("clutter" ,clutter)
+       ("gnome-desktop" ,gnome-desktop)
+       ("gnome-settings-daemon" ,gnome-settings-daemon)
+       ("granite" ,granite)
+       ("gtk+" ,gtk+)
+       ("libcanberra" ,libcanberra)
+       ("libgee" ,libgee)
+       ("mutter" ,mutter)
+       ("plank" ,plank)))
+    (home-page "https://github.com/elementary/gala")
+    (synopsis "Window Manager from elementary OS")
+    (description "A window & compositing manager
+based on libmutter and designed by elementary for use with Pantheon.")
     (license license:gpl3)))
