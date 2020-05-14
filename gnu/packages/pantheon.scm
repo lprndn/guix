@@ -945,3 +945,47 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Switchboard Sound Plug")
     (description "Switchboard Sound Plug.")
     (license license:gpl3)))
+
+(define-public switchboard-plug-network
+  (package
+    (name "switchboard-plug-network")
+    (version "2.3.0")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-network/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "1w7m2y5i89rb2rxjj4g9m5yvrvlh0pamir0sqkkpq80wwc1n0rv3"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-nma-path
+           (lambda* (#:key inputs #:allow-other-keys)
+             (let ((nma (assoc-ref inputs "network-manager-applet")))
+               (substitute* '("src/Widgets/SettingsButton.vala"
+                              "src/Views/VPNPage.vala")
+                 (("nm-connection-editor")
+                  (string-append nma "/bin/nm-connection-editor"))))
+             #t)))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)
+       ("network-manager" ,network-manager)
+       ("network-manager-applet" ,network-manager-applet)
+       ("switchboard" ,switchboard)))
+    (home-page "https://github.com/elementary/switchboard-plug-network")
+    (synopsis "Switchboard Network Plug")
+    (description "Switchboard Network Plug.")
+    (license license:gpl3)))
