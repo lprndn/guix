@@ -989,3 +989,35 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Switchboard Network Plug")
     (description "Switchboard Network Plug.")
     (license license:gpl3)))
+
+(define-public switchboard-plug-display
+  (package
+    (name "switchboard-plug-display")
+    (version "2.2.1")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-display/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "0fyrwi0rljs6ahss2c851wxmpxd81r0ysffz1r477py27xisaw90"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)
+       ("switchboard" ,switchboard)))
+    (home-page "https://github.com/elementary/switchboard-plug-display")
+    (synopsis "Switchboard Displays Plug")
+    (description "Switchboard Displays Plug.")
+    (license license:gpl3)))
