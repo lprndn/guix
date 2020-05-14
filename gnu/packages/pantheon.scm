@@ -1231,3 +1231,34 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Bluetooth Plug")
    (description "Switchboard Bluetooth Plug.")
    (license license:gpl3)))
+
+(define-public switchboard-plug-a11y
+  (package
+   (name "switchboard-plug-a11y")
+   (version "2.2.0")
+   (source (origin
+            (method url-fetch)
+            (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-a11y/"
+               version ".tar.gz"))
+            (sha256 (base32
+                     "1d9xihca1in5dp7w2qk6g0sz8r1vkvbmnz75v8g6q16qdmbf6c4w"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("libgee" ,libgee)
+      ("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-a11y")
+   (synopsis "Switchboard Universal Access Plug")
+   (description "Switchboard Universal Access Plug.")
+   (license license:gpl3)))
