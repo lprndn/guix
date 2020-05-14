@@ -1103,3 +1103,35 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Switchboard Power Plug")
     (description "Switchboard Power Plug.")
     (license license:gpl2+)))
+
+(define-public switchboard-plug-mouse-touchpad
+  (package
+    (name "switchboard-plug-mouse-touchpad")
+    (version "2.4.1")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-mouse-touchpad/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "0069l150yh78fas4dr79lsvhzz42qifx5j1m32p3fhidbh1dkv3b"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)
+       ("switchboard" ,switchboard)))
+    (home-page "https://github.com/elementary/switchboard-plug-touchpad")
+    (synopsis "Switchboard Mouse & Touchpad Plug")
+    (description "Switchboard Mouse & Touchpad Plug.")
+    (license license:gpl3)))
