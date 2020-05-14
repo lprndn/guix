@@ -1262,3 +1262,44 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Universal Access Plug")
    (description "Switchboard Universal Access Plug.")
    (license license:gpl3)))
+
+(define-public switchboard-plug-datetime
+  (package
+   (name "switchboard-plug-datetime")
+   (version "2.1.7")
+   (source (origin
+            (method url-fetch)
+            (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-datetime/"
+               version ".tar.gz"))
+            (sha256 (base32
+                     "1g6gv2sphkqiyma7y65icd9d6ifi9c4d5fiq9ypy2lbcxq98kcha"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t
+      #:phases
+      (modify-phases %standard-phases
+        (add-after 'unpack 'fix-tzdata-path
+          (lambda* (#:key inputs #:allow-other-keys)
+            (let ((tzdata (assoc-ref inputs "tzdata")))
+              (substitute* "src/Parser.vala"
+                (("/usr/share/zoneinfo/zone.tab")
+                 (string-append tzdata "/share/zoneinfo/zone.tab")))
+              #t))))))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("tzdata" ,tzdata)
+      ("libgee" ,libgee)
+      ("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-datetime")
+   (synopsis "Switchboard Date & Time Plug")
+   (description "Switchboard Date & Time Plug.")
+   (license license:gpl3)))
