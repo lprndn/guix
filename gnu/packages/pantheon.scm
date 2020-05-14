@@ -20,10 +20,8 @@
 (define-module (gnu packages pantheon)
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages base)
-<<<<<<< HEAD
+  #:use-module (gnu packages calendar)
   #:use-module (gnu packages cmake)
-=======
->>>>>>> 723f4bebc2... gnu: Add gala.
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
@@ -401,6 +399,44 @@ for elementary OS and its desktop environment: Pantheon.")
     (synopsis "Named, vector icons for elementary OS")
     (description "An original set of vector icons designed
  specifically for elementary OS and its desktop environment: Pantheon.")
+    (license license:gpl3)))
+
+(define-public elementary-calendar
+  (package
+    (name "elementary-calendar")
+    (version "5.0.4")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/calendar/archive/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "1ln0brprzavg6f9ss6smkhrrsnqij63b3p0zpblbwv3p2cx4s0w8"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("goject-introspection" ,gobject-introspection)
+       ("desktop-file-utils" ,desktop-file-utils)
+       ("gettext" ,gettext-minimal)
+       ("vala" ,vala)))
+    (inputs
+     `(("evolution-data-server" ,evolution-data-server)
+       ("clutter" ,clutter)
+       ("folks" ,folks)
+       ("geoclue" ,geoclue)
+       ("geocode-glib" ,geocode-glib)
+       ("granite" ,granite)
+       ("libchamplain" ,libchamplain)
+       ("libical" ,libical)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("libnotify" ,libnotify)))
+    (home-page "https://github.com/elementary/calendar")
+    (synopsis "Desktop calendar app designed for elementary OS")
+    (description "Desktop calendar app designed for elementary OS.")
     (license license:gpl3)))
 
 (define-public gala
