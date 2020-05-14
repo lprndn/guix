@@ -331,6 +331,43 @@ copy/paste, and little to no configuration.")
     (license (list license:gpl3+
                    license:lgpl2.1+))))
 
+(define-public elementary-dpms-helper
+  (package
+    (name "elementary-dpms-helper")
+    (version "1.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://github.com/elementary/dpms-helper/archive/"
+                                  version ".tar.gz"))
+              (sha256 (base32
+                       "0kbghw4955hayn529hghrs9bfkvl729sv4zfdf5v6x9c7933s4v8"))))
+    (build-system meson-build-system)
+    (arguments
+     `( ;; skip desktop file validation
+       #:tests? #f
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-desktop-file-exec-path
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (substitute* "data/io.elementary.dpms-helper.desktop"
+                 (("Exec=io.elementary.dpms-helper")
+                  (string-append "Exec=" out "/io.elementary.dpms-helper"))))
+             #t)))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("desktop-file-utils" ,desktop-file-utils)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("glib" ,glib)
+       ("gnome-settings-daemon" ,gnome-settings-daemon)))
+    (home-page "https://github.com/elementary/dpms-helper")
+    (synopsis "Sets DPMS settings found in io.elementary.dpms")
+    (description "This program is designed to be called by elementary OS directly
+when GNOME Settings Daemon is not managing the related settings.")
+    (license license:gpl2)))
+
 (define-public elementary-wallpapers
   (package
     (name "elementary-wallpapers")
