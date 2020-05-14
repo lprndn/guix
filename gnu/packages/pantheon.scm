@@ -1334,3 +1334,47 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Notifications Plug")
    (description "Switchboard Notifications Plug.")
    (license license:gpl2+)))
+
+(define-public switchboard-plug-keyboard
+  (package
+   (name "switchboard-plug-keyboard")
+   (version "2.3.6")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-keyboard/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "0vpgds6rr2qb3350zncsq8xvp3vf2mza13w7xxg9s9csgq8dk8m5"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t
+      #:phases
+      (modify-phases %standard-phases
+        (add-after 'unpack 'fix-paths
+          (lambda* (#:key inputs #:allow-other-keys)
+            (substitute* "src/Layout/Handler.vala"
+              (("/usr/share/X11/xkb/rules/evdev.xml")
+               (string-append (assoc-ref inputs "xkeyboard-config")
+                              "/share/X11/xkb/rules/evdev.xml")))
+            #t)))))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("libxml2" ,libxml2)
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("libgee" ,libgee)
+      ("gtk+" ,gtk+)
+      ("xkeyboard-config" ,xkeyboard-config)
+      ("granite" ,granite)
+      ("libgnomekbd" ,libgnomekbd)
+      ("libxklavier" ,libxklavier)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-keyboard")
+   (synopsis "Switchboard Keyboard Plug")
+   (description "Switchboard Keyboard Plug.")
+   (license license:gpl2+)))
