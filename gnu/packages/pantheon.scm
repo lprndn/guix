@@ -1135,3 +1135,35 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Switchboard Mouse & Touchpad Plug")
     (description "Switchboard Mouse & Touchpad Plug.")
     (license license:gpl3)))
+
+;; TODO Add an oem.conf for Guix
+(define-public switchboard-plug-about
+  (package
+    (name "switchboard-plug-about")
+    (version "2.6.2")
+    (source (origin
+              (method url-fetch)
+              (uri
+               (string-append
+                "https://github.com/elementary/switchboard-plug-about/"
+                version ".tar.gz"))
+              (sha256 (base32
+                       "0mwbipl4k7k4kiim9d2rxynz6f16n0z6kwhzvgmgcfb4nk5qif94"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)
+       ("switchboard" ,switchboard)))
+    (home-page "https://github.com/elementary/switchboard-plug-about")
+    (synopsis "Switchboard About Plug")
+    (description "Switchboard About Plug.")
+    (license license:gpl3)))
