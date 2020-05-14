@@ -21,6 +21,7 @@
 ;;; Copyright © 2020 Rene Saavedra <pacoon@protonmail.com>
 ;;; Copyright © 2020 Nicolò Balzarotti <nicolo@nixo.xyz>
 ;;; Copyright © 2020 Ryan Prior <rprior@protonmail.com>
+;;; Copyright © 2020 L  p R n  d n <guix@lprndn.info>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -87,6 +88,8 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages rdf)
+  #:use-module (gnu packages search)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages valgrind)
   #:use-module (gnu packages video)
@@ -1932,3 +1935,61 @@ fallback to generic Systray support if none of those are available.")
 we interact with the software repositories provided by GNU/Linux distributions
 by standardizing software component metadata.")
     (license license:gpl2)))
+
+(define-public zeitgeist
+  (package
+   (name "zeitgeist")
+   (version "1.0.2")
+   (source (origin
+            (method git-fetch)
+            (uri (git-reference
+                  (url "https://gitlab.freedesktop.org/zeitgeist/zeitgeist.git")
+                  (commit "f6394278664b19210823d27e9c04d363f38bd33d")))
+            (sha256
+             (base32
+              "0ig3d3j1n0ghaxsgfww6g2hhcdwx8cljwwfmp9jk1nrvkxd6rnmv"))))
+   (build-system gnu-build-system)
+   (arguments
+    `(#:tests? #f ;;needs /etc/machine-id
+      #:configure-flags
+      (list "--enable-fts"
+            (string-append
+             "--with-session-bus-services-dir="
+             (assoc-ref %outputs "out") "/share/dbus-1/services"))
+      #:phases
+      (modify-phases %standard-phases
+        (add-after 'unpack 'fix-gettext-version
+          ;; https://gitlab.freedesktop.org/zeitgeist/zeitgeist/issues/18
+          (lambda _
+            (substitute* "configure.ac"
+              (("AM_GNU_GETTEXT_VERSION\\(\\[0.19\\]\\)")
+               "AM_GNU_GETTEXT_VERSION([0.20])"))
+            #t)))))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection" ,gobject-introspection)
+      ("vala" ,vala)
+      ("python-rdflib" ,python-rdflib)
+      ("autoconf" ,autoconf)
+      ("automake" ,automake)
+      ("libtool" ,libtool)))
+   (inputs
+    `(("glib" ,glib)
+      ("sqlite" ,sqlite)
+      ("dbus-glib" ,dbus-glib)
+      ("telepathy-glib" ,telepathy-glib)
+      ("json-glib" ,json-glib)
+      ("python" ,python)
+      ("gtk+" ,gtk+)
+      ("raptor2" ,raptor2)
+      ("xapian" ,xapian)))
+   (home-page "https://zeitgeist.freedesktop.org/")
+   (synopsis "Service which logs the users's activities and events")
+   (description "Zeitgeist is a service which logs the users's activities and events
+(files opened, websites visites, conversations held with other people, etc.)
+and makes relevant information available to other applications.
+It is able to establish relationships between items based on similarity
+and usage patterns.")
+   (license (list license:gpl2+
+                  license:lgpl2.1+))))
