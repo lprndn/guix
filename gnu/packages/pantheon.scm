@@ -1200,3 +1200,34 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Printers Plug")
    (description "Switchboard Printers Plug.")
    (license license:gpl3)))
+
+(define-public switchboard-plug-bluetooth
+  (package
+   (name "switchboard-plug-bluetooth")
+   (version "2.3.1")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-bluetooth/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "04msz0c8prphqamsmip712l83aw5r2k6jmr47v1rs001q4i09bvs"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("libgee" ,libgee)
+      ("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-bluetooth")
+   (synopsis "Switchboard Bluetooth Plug")
+   (description "Switchboard Bluetooth Plug.")
+   (license license:gpl3)))
