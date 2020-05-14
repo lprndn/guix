@@ -32,6 +32,7 @@
   #:use-module (gnu packages linux)
   #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages polkit)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python)
   #:use-module (gnu packages xdisorg)
@@ -1058,3 +1059,47 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Switchboard Displays Plug")
     (description "Switchboard Displays Plug.")
     (license license:gpl3)))
+
+(define-public switchboard-plug-power
+  (package
+    (name "switchboard-plug-power")
+    (version "2.4.1")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-power/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "1dji0jagfj6264hw3714ig8gzivdcmzsdjfzvbbpaj5fg05himk8"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'fix-dpms-helper
+           (lambda* (#:key inputs #:allow-other-keys)
+             (substitute* "src/MainView.vala"
+               (("io.elementary.dpms-helper")
+                (string-append (assoc-ref inputs "elementary-dpms-helper")
+                               "/bin/io.elementary.dpms-helper")))
+             #t)))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("elementary-dpms-helper" ,elementary-dpms-helper)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("dbus" ,dbus)
+       ("polkit" ,polkit)
+       ("switchboard" ,switchboard)
+       ("granite" ,granite)))
+    (home-page "https://github.com/elementary/switchboard-plug-power")
+    (synopsis "Switchboard Power Plug")
+    (description "Switchboard Power Plug.")
+    (license license:gpl2+)))
