@@ -911,3 +911,37 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Switchboard Desktop Plug")
     (description "Switchboard Desktop Plug.")
     (license license:gpl3)))
+
+(define-public switchboard-plug-sound
+  (package
+    (name "switchboard-plug-sound")
+    (version "2.2.3")
+    (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-sound/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "0va8daa5l0v9b9x8fmicyrd337ijpizy6xaca5y5klhx7qjka338"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)
+       ("switchboard" ,switchboard)
+       ("libcanberra" ,libcanberra)
+       ("pulseaudio" ,pulseaudio)))
+    (home-page "https://github.com/elementary/switchboard-plug-sound")
+    (synopsis "Switchboard Sound Plug")
+    (description "Switchboard Sound Plug.")
+    (license license:gpl3)))
