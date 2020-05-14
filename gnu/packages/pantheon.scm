@@ -1303,3 +1303,34 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Date & Time Plug")
    (description "Switchboard Date & Time Plug.")
    (license license:gpl3)))
+
+(define-public switchboard-plug-notifications
+  (package
+   (name "switchboard-plug-notifications")
+   (version "2.1.6")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-notifications/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "0c079hdv147nbxq1qa95lslaxc53zwzj4avkrv9va9wh0rva4x55"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("libgee" ,libgee)
+      ("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-notifications")
+   (synopsis "Switchboard Notifications Plug")
+   (description "Switchboard Notifications Plug.")
+   (license license:gpl2+)))
