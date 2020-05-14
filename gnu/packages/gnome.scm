@@ -6458,6 +6458,7 @@ users.")
        ("libxslt" ,libxslt)
        ("libxml2" ,libxml2)
        ("pkg-config" ,pkg-config)
+       ("vala" ,vala)
        ;; For testing.
        ("python" ,python-wrapper)
        ("python-dbus" ,python-dbus)
