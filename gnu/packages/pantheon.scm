@@ -836,3 +836,41 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Wingpanel Keyboard Indicator")
    (description "Wingpanel Keyboard Indicator.")
    (license license:gpl3)))
+
+(define-public wingpanel-indicator-datetime
+  (package
+    (name "wingpanel-indicator-datetime")
+    (version "2.2.2")
+    (source (origin
+              (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/wingpanel-indicator-datetime/archive/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "18my3rf57nawnkcqnqhimy6fjdn1cjx66x00il2ilbq7gscmv7sq"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("elementary-calendar" ,elementary-calendar)
+       ("evolution-data-server" ,evolution-data-server)
+       ("granite" ,granite)
+       ("libsoup" ,libsoup)
+       ("libical" ,libical)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("wingpanel" ,wingpanel)))
+    (home-page "https://github.com/elementary/wingpanel-indicator-datetime")
+    (synopsis "Wingpanel Date & Time Indicator")
+    (description "Wingpanel Date & Time Indicator.")
+    (license (list
+              license:gpl2+
+              license:gpl3))))
