@@ -874,3 +874,40 @@ which provide the actual settings for various hardware and software.")
     (license (list
               license:gpl2+
               license:gpl3))))
+
+(define-public switchboard-plug-pantheon-shell
+  (package
+    (name "switchboard-plug-pantheon-shell")
+    (version "2.8.4")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-pantheon-shell/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "0dkq4f5ysk5fdg0p2dp1dyrl65cniyg6nbss5sxd3pqjgap3phlv"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection"  ,gobject-introspection)))
+    (inputs
+     `(("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("granite" ,granite)
+       ("bamf" ,bamf)
+       ("gnome-desktop" ,gnome-desktop)
+       ("gnome-settings-daemon" ,gnome-settings-daemon)
+       ("switchboard" ,switchboard)
+       ("plank" ,plank)
+       ("gexiv2" ,gexiv2)))
+    (home-page "https://github.com/elementary/switchboard-plug-pantheon-shell")
+    (synopsis "Switchboard Desktop Plug")
+    (description "Switchboard Desktop Plug.")
+    (license license:gpl3)))
