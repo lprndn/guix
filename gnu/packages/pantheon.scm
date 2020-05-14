@@ -22,6 +22,7 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages calendar)
   #:use-module (gnu packages cmake)
+  #:use-module (gnu packages cups)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
@@ -1167,3 +1168,35 @@ which provide the actual settings for various hardware and software.")
     (synopsis "Switchboard About Plug")
     (description "Switchboard About Plug.")
     (license license:gpl3)))
+
+(define-public switchboard-plug-printers
+  (package
+   (name "switchboard-plug-printers")
+   (version "2.1.8")
+   (source (origin
+             (method url-fetch)
+             (uri
+               (string-append
+                "https://github.com/elementary/switchboard-plug-printers/"
+                version ".tar.gz"))
+             (sha256 (base32
+                      "0sj8lpgahc9yzh4jlsraxkq472vhl7fnzmwpzxzb3jg9scn6rbw4"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("libgee" ,libgee)
+      ("cups" ,cups)
+      ("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-printers")
+   (synopsis "Switchboard Printers Plug")
+   (description "Switchboard Printers Plug.")
+   (license license:gpl3)))
