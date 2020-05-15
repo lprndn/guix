@@ -1412,3 +1412,34 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Keyboard Plug")
    (description "Switchboard Keyboard Plug.")
    (license license:gpl2+)))
+
+(define-public switchboard-plug-sharing
+  (package
+   (name "switchboard-plug-sharing")
+   (version "2.1.4")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-sharing/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "1vc3gayp55x2wbg470djjlfhqq7qqbd1q76zggn3hvjvfs0z7kbf"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("libxml2" ,libxml2)
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-sharing")
+   (synopsis "Switchboard Sharing Plug")
+   (description "Switchboard Sharing Plug.")
+   (license license:gpl3+)))
