@@ -18,11 +18,14 @@
 
 (define-module (gnu packages pantheon)
   #:use-module (gnu packages cmake)
+  #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages package-management)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages xml)
   #:use-module (gnu packages)
   #:use-module (guix build-system meson)
   #:use-module (guix git-download)
@@ -106,4 +109,57 @@ in apps built for the Pantheon desktop.")
     (description "Calculator is an application for performing simple
 arithmetic.  It is the default calculator application in the Pantheon
 desktop.")
+    (license license:gpl3)))
+
+(define-public sideload
+  (package
+    (name "sideload")
+    (version "1.1.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/elementary/sideload.git")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32
+         "1nnaq4vc0aag6pckxhrma5qv8al7i00rrlg95ac4iqqmivja7i92"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:configure-flags (list (string-append "-Dflatpak="
+                                              (assoc-ref %build-inputs "flatpak")
+                                              "/include"))
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'install-symlinks
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin/io.elementary.sideload"))
+                    (link (string-append out "/bin/sideload")))
+               (symlink bin link)))))))
+    (inputs
+     `(("flatpak" ,flatpak)
+       ("granite" ,granite)
+       ("gtk" ,gtk+)
+       ("libostree" ,libostree)))
+    (propagated-inputs
+     `(("glib-networking" ,glib-networking)))
+    (native-inputs
+     `(("cmake" ,cmake)
+       ("desktop-file-utils" ,desktop-file-utils) ; for update-desktop-database
+       ("gettext" ,gettext-minimal)
+       ("glib" ,glib)
+       ("glib:bin" ,glib "bin")
+       ("gobject-introspection" ,gobject-introspection)
+       ("libgee" ,libgee)
+       ("libxml2" ,libxml2)
+       ("pkg-config" ,pkg-config)
+       ("vala" ,vala)))
+    (home-page "https://github.com/elementary/sideload")
+    (synopsis "Graphical application to side-load Flatpaks")
+    (description "Sideload handles flatpakref files, like those you might find
+on Flathub or another third-party website providing a Flatpak app for
+download.")
     (license license:gpl3)))
