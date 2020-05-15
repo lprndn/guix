@@ -163,3 +163,48 @@ desktop.")
 on Flathub or another third-party website providing a Flatpak app for
 download.")
     (license license:gpl3)))
+
+(define-public pantheon-terminal
+  (package
+    (name "pantheon-terminal")
+    (version "5.5.2")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/elementary/terminal.git")
+                    (commit version)))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "119iwmzbpkj4nmxinqfsh73lx23g8gbl6ha6wc4mc4fq9hpnc9c2"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'install-symlinks
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin/io.elementary.terminal"))
+                    (link (string-append out "/bin/pantheon-terminal")))
+               (symlink bin link)))))))
+    (inputs
+     `(("granite" ,granite)
+       ("gtk" ,gtk+)
+       ("vte" ,vte)))
+    (native-inputs
+     `(("gettext" ,gettext-minimal)
+       ("glib" ,glib)
+       ("appstream" ,appstream)
+       ("libgee" ,libgee)
+       ("desktop-file-utils" ,desktop-file-utils) ; for update-desktop-database
+       ("glib:bin" ,glib "bin") ; for glib-compile-resources
+       ("pkg-config" ,pkg-config)
+       ("gobject-introspection" ,gobject-introspection)
+       ("vala" ,vala)))
+    (home-page "https://github.com/elementary/terminal")
+    (synopsis "Graphical terminal with opinionated design and thoughtful touches")
+    (description "A lightweight, beautiful, and simple terminal application.
+Comes with sane defaults, browser-like tabs, sudo paste protection, smart
+copy/paste, and little to no configuration.")
+    (license license:lgpl3)))
