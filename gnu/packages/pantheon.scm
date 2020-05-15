@@ -1378,3 +1378,37 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Keyboard Plug")
    (description "Switchboard Keyboard Plug.")
    (license license:gpl2+)))
+
+(define-public switchboard-plug-security-privacy
+  (package
+   (name "switchboard-plug-security-privacy")
+   (version "2.2.3")
+   (source (origin
+             (method url-fetch)
+             (uri
+              (string-append
+               "https://github.com/elementary/switchboard-plug-security-privacy/"
+               version ".tar.gz"))
+             (sha256 (base32
+                      "1h0kzw1jm66pq3xq7gd943ar7nk8crmap4hph2xgiqg2jv89ycsd"))))
+   (build-system meson-build-system)
+   (arguments
+    `(#:glib-or-gtk? #t))
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("vala" ,vala)
+      ("glib:bin" ,glib "bin")
+      ("libxml2" ,libxml2)
+      ("gettext" ,gettext-minimal)
+      ("gobject-introspection"  ,gobject-introspection)))
+   (inputs
+    `(("libgee" ,libgee)
+      ("gtk+" ,gtk+)
+      ("granite" ,granite)
+      ("polkit" ,polkit)
+      ("zeitgeist" ,zeitgeist)
+      ("switchboard" ,switchboard)))
+   (home-page "https://github.com/elementary/switchboard-plug-keyboard")
+   (synopsis "Switchboard Keyboard Plug")
+   (description "Switchboard Keyboard Plug.")
+   (license license:gpl2+)))
