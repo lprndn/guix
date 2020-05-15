@@ -20,6 +20,7 @@
 ;;; Copyright © 2020 Jakub Kądziołka <kuba@kadziolka.net>
 ;;; Copyright © 2020 Rene Saavedra <pacoon@protonmail.com>
 ;;; Copyright © 2020 Nicolò Balzarotti <nicolo@nixo.xyz>
+;;; Copyright © 2020 Ryan Prior <rprior@protonmail.com>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -55,8 +56,10 @@
   #:use-module (gnu packages bash)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages check)
+  #:use-module (gnu packages cmake)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages cryptsetup)
+  #:use-module (gnu packages databases)
   #:use-module (gnu packages disk)
   #:use-module (gnu packages docbook)
   #:use-module (gnu packages documentation)
@@ -1874,3 +1877,58 @@ useful with system integration.")
 into the Unity menu bar.  Based on KSNI, it also works in KDE and will
 fallback to generic Systray support if none of those are available.")
     (license license:lgpl2.1+)))
+
+(define-public appstream
+  (package
+    (name "appstream")
+    (version "0.12.10")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/ximion/appstream.git")
+                    (commit (string-append "v" version))))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1r4q7xi1xvpjcnyzkzb4pshhvd4agz7cc5nbb3kqb22054zab2qj"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:configure-flags
+       (list "-Dvapi=true"
+             "-Dstemming=false"
+             "-Dapidocs=false"
+             "-Dinstall-docs=false")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'disable-stemmer-inc-dirs
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out")))
+               (substitute* "meson.build"
+                 (("include_directories\\(\\['\\/usr\\/include'\\]\\)")
+                  "''")
+                 (("subdir\\('docs\\/'\\)")
+                  ""))
+               (substitute* "data/meson.build"
+                 (("\\/etc")
+                   (string-append out "/etc")))
+               #t))))))
+    (native-inputs
+     `(("libxml2" ,libxml2)
+       ("gettext" ,gettext-minimal)
+       ("libxslt" ,libxslt)
+       ("glib2" ,glib)
+       ("glib:bin" ,glib "bin") ; for glib-compile-resources
+       ("pkg-config" ,pkg-config)
+       ("libsoup" ,libsoup)
+       ("gobject-introspection" ,gobject-introspection)
+       ("libyaml" ,libyaml)
+       ("vala" ,vala)
+       ("gperf" ,gperf)
+       ("cmake" ,cmake)
+       ("lmdb" ,lmdb)))
+    (home-page "https://www.freedesktop.org/wiki/Distributions/AppStream/")
+    (synopsis "Provides the foundation to build software-center applications")
+    (description "AppStream is a cross-distribution effort for enhancing the way
+we interact with the software repositories provided by GNU/Linux distributions
+by standardizing software component metadata.")
+    (license license:gpl2)))
