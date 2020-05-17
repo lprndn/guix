@@ -70,6 +70,7 @@
 ;;; Copyright © 2020 Alberto Eleuterio Flores Guerrero <barbanegra+guix@posteo.mx>
 ;;; Copyright © 2020 Marius Bakke <mbakke@fastmail.com>
 ;;; Copyright © 2020 pinoaffe <pinoaffe@airmail.cc>
+;;; Copyright © 2020 Ryan Prior <rprior@protonmail.com>
 ;;;
 ;;; This file is part of GNU Guix.
 ;;;
@@ -16624,6 +16625,28 @@ provided by other Emacs packages dealing with pass:
        "Image+ provides keybindings allowing you to zoom in or zoom out of an
 image, rotate it, save modified images, and more.")
       (license license:gpl3+))))
+
+(define-public emacs-importmagic
+  (package
+    (name "emacs-importmagic")
+    (version "20180520.303")
+    (source
+     (origin
+       (method url-fetch)
+       (uri
+        (string-append "https://melpa.org/packages/importmagic-" version ".tar"))
+       (sha256
+        (base32 "0xk4i4x4836ksv2pr3aarpbkq6b5sz8c3y6f39fwf698v8zirhs9"))))
+    (build-system emacs-build-system)
+    (propagated-inputs
+     `(("emacs-epc" ,emacs-epc)
+       ("emacs-f" ,emacs-f)
+       ("python-epc" ,python-epc)
+       ("python-importmagic" ,python-importmagic)))
+    (home-page "https://github.com/anachronic/importmagic.el")
+    (synopsis "Fix Python imports")
+    (description "Importmagic.el fixes unresolved imports in Python buffers.")
+    (license license:gpl3)))
 
 (define-public emacs-package-lint
   (let ((commit "69bb89d00ba212b734c676ad056aa793c450b288"))
