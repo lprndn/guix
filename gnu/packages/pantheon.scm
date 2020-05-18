@@ -36,6 +36,8 @@
   #:use-module (gnu packages polkit)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python)
+  #:use-module (gnu packages sqlite)
+  #:use-module (gnu packages sync)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages xml)
@@ -476,6 +478,49 @@ for elementary OS and its desktop environment: Pantheon.")
     (home-page "https://github.com/elementary/calendar")
     (synopsis "Desktop calendar app designed for elementary OS")
     (description "Desktop calendar app designed for elementary OS.")
+    (license license:gpl3)))
+
+(define-public elementary-files
+  (package
+    (name "elementary-files")
+    (version "4.4.2")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/files/archive/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "1rqalkmgzsp7f8k0r92lh3qv8f881a1ymhs2ggsz57rsxw8j5788"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:tests? #f
+       #:configure-flags
+       (list "-Dwith-unity=false")))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("goject-introspection" ,gobject-introspection)
+       ("glib-networking" ,glib-networking)
+       ("desktop-file-utils" ,desktop-file-utils)
+       ("gettext" ,gettext-minimal)
+       ("glib:bin" ,glib "bin")
+       ("gtk+:bin" ,gtk+ "bin")
+       ("vala" ,vala)))
+    (inputs
+     `(("granite" ,granite)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("libcloudproviders" ,libcloudproviders)
+       ("libgit2-glib" ,libgit2-glib)
+       ("libnotify" ,libnotify)
+       ("plank" ,plank)
+       ("sqlite" ,sqlite)
+       ("zeitgeist" ,zeitgeist)
+       ("libcanberra" ,libcanberra)))
+    (home-page "https://github.com/elementary/files")
+    (synopsis "File browser designed for elementary OS")
+    (description "File browser app designed for elementary OS.")
     (license license:gpl3)))
 
 (define-public gala
