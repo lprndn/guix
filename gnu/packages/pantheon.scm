@@ -550,6 +550,38 @@ for elementary OS and its desktop environment: Pantheon.")
     (description "File browser app designed for elementary OS.")
     (license license:gpl3)))
 
+(define-public elementary-screenshot
+  (package
+    (name "elementary-screenshot")
+    (version "1.7.1")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/screenshot/archive/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "1qiiqhi1jc06ka9j65sy8fc6hq6xcmblvslywdiawhcv3gqap297"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("goject-introspection" ,gobject-introspection)
+       ("desktop-file-utils" ,desktop-file-utils)
+       ("gettext" ,gettext-minimal)
+       ("glib:bin" ,glib "bin")
+       ("vala" ,vala)))
+    (inputs
+     `(("libcanberra" ,libcanberra)
+       ("granite" ,granite)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+)))
+    (home-page "https://github.com/elementary/screenshot")
+    (synopsis "Desktop calendar app designed for elementary OS")
+    (description "Desktop calendar app designed for elementary OS.")
+    (license license:gpl3+)))
+
 (define-public gala
   (package
     (name "gala")
