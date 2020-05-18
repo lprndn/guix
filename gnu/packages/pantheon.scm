@@ -372,6 +372,33 @@ copy/paste, and little to no configuration.")
 when GNOME Settings Daemon is not managing the related settings.")
     (license license:gpl2)))
 
+(define-public pantheon-agent-polkit
+  (package
+    (name "pantheon-agent-polkit")
+    (version "1.0.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/pantheon-agent-polkit/archive/"
+                    version ".tar.gz"))
+              (sha256 (base32
+                       "1lfk3l5a1pyhrxavqgs12cnhl9ihy68scc8nz5x029hn3k62qsix"))))
+    (build-system meson-build-system)
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("granite" ,granite)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("polkit" ,polkit)))
+    (home-page "https://github.com/elementary/pantheon-agent-polkit")
+    (synopsis "Polkit Agent for the Pantheon Desktop")
+    (description "Polkit Agent for the Pantheon Desktop.")
+    (license license:lgpl2.1)))
+
 (define-public elementary-wallpapers
   (package
     (name "elementary-wallpapers")
