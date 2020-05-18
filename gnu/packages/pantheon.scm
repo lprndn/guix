@@ -914,6 +914,47 @@ which provide the actual settings for various hardware and software.")
               license:gpl2+
               license:gpl3))))
 
+(define-public wingpanel-applications-menu
+  (package
+    (name "wingpanel-applications-menu")
+    (version "2.7.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/applications-menu/archive/"
+                    version ".tar.gz"))
+              (sha256 (base32
+                       "1wqky45pi8ci4mdkbn460w5kpzzhisymgjlw0irzkdxlnfxxd1zw"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:configure-flags
+       '("-Dwith-unity=false")))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("appstream" ,appstream)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")
+       ("gettext" ,gettext-minimal)
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("gnome-menus" ,gnome-menus)
+       ("libsoup" ,libsoup)
+       ("plank" ,plank)
+       ("json-glib" ,json-glib)
+       ("libwnck" ,libwnck)
+       ("libhandy" ,libhandy)
+       ("granite" ,granite)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("zeitgeist" ,zeitgeist)
+       ("wingpanel" ,wingpanel)
+       ("switchboard" ,switchboard)))
+    (home-page "https://github.com/elementary/applications-menu")
+    (synopsis "The Pantheon applications menu")
+    (description "The Pantheon applications menu.")
+    (license license:gpl3+)))
+
 (define-public switchboard-plug-pantheon-shell
   (package
     (name "switchboard-plug-pantheon-shell")
