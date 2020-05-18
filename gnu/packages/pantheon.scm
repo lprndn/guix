@@ -325,3 +325,24 @@ copy/paste, and little to no configuration.")
  which can be extended to create other dock programs with more advanced features.")
     (license (list license:gpl3+
                    license:lgpl2.1+))))
+
+(define-public elementary-wallpapers
+  (package
+    (name "elementary-wallpapers")
+    (version "5.5.0")
+    (source (origin
+              (method git-fetch)
+              (file-name (git-file-name name version))
+              (uri (git-reference
+                    (url "https://github.com/elementary/wallpapers.git")
+                    (commit "47b25c2268ff011af74628dedc00d66e73fe051e")))
+              (sha256 (base32
+                       "0c63nds2ylqgcp39s13mfwhipgyw8cirn0bhybp291l5g86ii6s3"))))
+    (build-system meson-build-system)
+    (native-inputs
+     `(("gettext" ,gettext-minimal)))
+    (home-page "https://github.com/elementary/wallpapers")
+    (synopsis "Collection of wallpapers from elementary OS")
+    (description "Collection of wallpapers from elementary OS.")
+    ;; TODO: Add unsplash license
+    (license license:public-domain)))
