@@ -1443,3 +1443,46 @@ which provide the actual settings for various hardware and software.")
    (synopsis "Switchboard Sharing Plug")
    (description "Switchboard Sharing Plug.")
    (license license:gpl3+)))
+
+(define-public switchboard-elementary-tweaks
+  (let ((revision "1")
+        (commit "5e2e0e1d4ac8da72e616d126a85284902c324224"))
+    (package
+      (name "switchboard-elementary-tweaks")
+      (version (git-version "1.0" revision commit))
+      (source (origin
+                (method git-fetch)
+                (file-name (git-file-name name version))
+                (uri (git-reference
+                      (url "https://github.com/elementary-tweaks/elementary-tweaks.git")
+                      (commit commit)))
+                (sha256 (base32
+                         "09mg6y3jl3p7vl1ml9k7ac4a0dqv0s32y13xwmy9q7zy664fwslk"))))
+      (build-system meson-build-system)
+      (arguments
+       `(#:glib-or-gtk? #t
+         #:phases
+         (modify-phases %standard-phases
+           (add-before 'configure 'fix-switchboard-dir
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let ((out (assoc-ref outputs "out")))
+                 (setenv "PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR"
+                         (string-append out "/lib/switchboard"))
+                 #t))))))
+      (native-inputs
+       `(("vala" ,vala)
+         ("pkg-config" ,pkg-config)
+         ("gtk+:bin" ,gtk+ "bin")
+         ("gettext" ,gettext-minimal)))
+      (inputs
+       `(("polkit" ,polkit)
+         ("glib" ,glib)
+         ("gtk+" ,gtk+)
+         ("libgee" ,libgee)
+         ("granite" ,granite)
+         ("switchboard" ,switchboard)))
+      (home-page "https://github.com/elementary-tweaks/elementary-tweaks")
+      (synopsis "elementary OS customization tool ")
+      (description "elementary tweaks is a system settings panel for elementary OS
+that lets you easily and safely customise your desktop's appearance")
+      (license license:gpl3+))))
