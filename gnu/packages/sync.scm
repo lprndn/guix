@@ -41,6 +41,7 @@
   #:use-module (gnu packages curl)
   #:use-module (gnu packages documentation)
   #:use-module (gnu packages glib)
+  #:use-module (gnu packages gnome)
   #:use-module (gnu packages golang)
   #:use-module (gnu packages image)
   #:use-module (gnu packages linux)
@@ -393,3 +394,30 @@ Features include:
 @end itemize")
     (home-page "https://rclone.org/")
     (license license:expat)))
+
+(define-public libcloudproviders
+  (package
+   (name "libcloudproviders")
+   (version "0.3.0")
+   (source (origin
+             (method git-fetch)
+             (uri (git-reference
+                   (url "https://gitlab.gnome.org/World/libcloudproviders.git")
+                   (commit "79d1652a0aadab39648bc30db853cdb1d6e2bf95")))
+             (sha256 (base32
+                      "1pqfycij5xviw4silwyyd7ly3d31fp02ib4blhzj9bj8hcp66fb6"))))
+   (build-system meson-build-system)
+   (native-inputs
+    `(("pkg-config" ,pkg-config)
+      ("gobject-introspection" ,gobject-introspection)
+      ("vala" ,vala)))
+   (inputs
+    `(("glib" ,glib)
+      ("glib:bin" ,glib "bin")))
+   (home-page "https://gitlab.gnome.org/World/libcloudproviders")
+   (synopsis "DBus API that allows cloud storage sync clients to expose their services")
+   (description "libcloudproviders is a DBus API that allows cloud storage
+sync clients to expose their services. Clients such as file managers
+and desktop environments can then provide integrated access
+to the cloud providers services.")
+   (license license:lgpl3+)))
