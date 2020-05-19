@@ -399,6 +399,36 @@ when GNOME Settings Daemon is not managing the related settings.")
     (description "Polkit Agent for the Pantheon Desktop.")
     (license license:lgpl2.1)))
 
+(define-public contractor
+  (let ((commit "73372b49f9e908811c7ef53444a82aa1a1fcb053")
+        (revision "1"))
+    (package
+      (name "contractor")
+      (version (git-version "0.3.4" revision commit))
+      (source (origin
+                (method git-fetch)
+                (file-name (git-file-name name version))
+                (uri (git-reference
+                      (url "https://github.com/elementary/contractor.git")
+                      (commit commit)))
+                (sha256 (base32
+                         "0mhw7ipka5y8fkd80dr2qqi5kxqvnb8hmv4km4d0y51hivv6cv0c"))))
+      (arguments
+       `(#:glib-or-gtk? #t))
+      (build-system meson-build-system)
+      (native-inputs
+       `(("pkg-config" ,pkg-config)
+         ("vala" ,vala)
+         ("gobject-introspection" ,gobject-introspection)
+         ("dbus" ,dbus)))
+      (inputs
+       `(("libgee" ,libgee)
+         ("glib" ,glib)))
+      (home-page "https://github.com/elementary/contractor")
+      (synopsis "Desktop-wide extension service used by elementary OS")
+      (description "A desktop-wide extension service used by elementary OS.")
+      (license license:gpl3+))))
+
 (define-public elementary-wallpapers
   (package
     (name "elementary-wallpapers")
