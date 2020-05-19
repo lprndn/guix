@@ -495,6 +495,34 @@ airports, and trains—with ease. Captive Network Assistant automatically opens 
 help you get connected.")
     (license license:gpl2+)))
 
+;; TODO: Maybe add dconf as propagated-input?
+(define-public elementary-shortcut-overlay
+  (package
+    (name "elementary-shortcut-overlay")
+    (version "1.1.1")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/shortcut-overlay/archive/"
+                    version ".tar.gz"))
+              (sha256
+               (base32 "0qkkd7x2ppav2p8sq3l59qp1g3xz09k86m68yhn29yrvj901d3wy"))))
+    (build-system meson-build-system)
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("gettext" ,gettext-minimal)
+       ("vala" ,vala)
+       ("desktop-file-utils" ,desktop-file-utils) ;desktop-file-validate
+       ("glib:bin" ,glib "bin"))) ;glib-compile-schemas
+    (inputs
+     `(("granite" ,granite)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+) ))
+    (home-page "https://github.com/elementary/shortcut-overlay")
+    (synopsis "Native, OS-wide shortcut overlay")
+    (description "A native OS-wide shortcut overlay to be launched by Gala.")
+    (license license:gpl3+)))
+
 (define-public elementary-wallpapers
   (package
     (name "elementary-wallpapers")
