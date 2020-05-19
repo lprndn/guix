@@ -404,6 +404,37 @@ when GNOME Settings Daemon is not managing the related settings.")
     (description "Polkit Agent for the Pantheon Desktop.")
     (license license:lgpl2.1)))
 
+(define-public pantheon-agent-geoclue2
+  (package
+    (name "pantheon-agent-geoclue2")
+    (version "1.0.4")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/pantheon-agent-geoclue2/archive/"
+                    version ".tar.gz"))
+              (sha256 (base32
+                       "0bb0lnvfklyqgkk1psw07izfc2a209npf9bb0zj5xhly0f30i6q7"))))
+    (build-system meson-build-system)
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("gettext" ,gettext-minimal)
+       ("desktop-file-utils" ,desktop-file-utils) ;desktop-file-validate
+       ("gobject-introspection" ,gobject-introspection)))
+    (inputs
+     `(("granite" ,granite)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("geoclue" ,geoclue)))
+    (home-page "https://github.com/elementary/pantheon-agent-geoclue2")
+    (synopsis " Pantheon Geoclue2 Agent ")
+    (description "The location services agent appears whenever an application
+wants to request permission to use location services. From this dialog, you can
+see what level of access the application is requesting and either approve or
+deny its access to your current location.")
+    (license license:gpl3+)))
+
 (define-public contractor
   (let ((commit "73372b49f9e908811c7ef53444a82aa1a1fcb053")
         (revision "1"))
