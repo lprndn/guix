@@ -340,6 +340,49 @@ copy/paste, and little to no configuration.")
     (license (list license:gpl3+
                    license:lgpl2.1+))))
 
+(define-public elementary-session-settings
+  (let (
+        ;; meson.build + some fixes for NixOS that we might need
+        (commit "39bd694428603c42cb7e84da8addfc7fa6d57466")
+        (revision "1"))
+  (package
+    (name "elementary-session-settings")
+    (version (git-version "5.0.3" revision commit))
+    (source (origin
+              (method git-fetch)
+              (file-name (git-file-name name version))
+              (uri (git-reference
+                    (url "https://github.com/elementary/session-settings.git")
+                    (commit commit)))
+              (sha256 (base32
+                       "1k4czh82sms2qwsdx4m0qmiic431ijp93dblnsqjb0py1x0kj8b2" ))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:configure-flags (list "-Dpatched-gsd-autostarts=false"
+                               "-Dpatched-ubuntu-autostarts=false"
+                               "-Dfallback-session=GNOME")
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'unpack 'harcode-paths
+           (lambda* (#:key inputs #:allow-other-keys)
+             (let ((wingpanel (assoc-ref inputs "wingpanel"))
+                   (gnome-session (assoc-ref inputs "gnome-session")))
+               (substitute* "xsessions/pantheon.desktop"
+                 (("gnome-session")
+                  (string-append gnome-session "/bin/gnome-session"))
+                 (("wingpanel")
+                  (string-append wingpanel "/bin/wingpanel")))
+               #t))))))
+    (inputs
+     `(("gnome-settings-daemon" ,gnome-settings-daemon)
+       ("wingpanel" ,wingpanel)
+       ("gnome-session" ,gnome-session)))
+    (home-page "https://github.com/elementary/session-settings")
+    (synopsis "Session settings for Pantheon desktop.")
+    (description "Installs Pantheon login session and provides
+ some session-specific configuration files and defaults.")
+    (license license:gpl2+))))
+
 (define-public elementary-dpms-helper
   (package
     (name "elementary-dpms-helper")
