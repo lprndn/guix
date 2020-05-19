@@ -23,6 +23,7 @@
   #:use-module (gnu packages calendar)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages cups)
+  #:use-module (gnu packages display-managers)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
@@ -826,6 +827,49 @@ Designed to be light, natural/physical, and pleasant.")
        ("libgee" ,libgee)
        ("mutter" ,mutter)
        ("plank" ,plank)))
+    (home-page "https://github.com/elementary/gala")
+    (synopsis "Window Manager from elementary OS")
+    (description "A window & compositing manager
+based on libmutter and designed by elementary for use with Pantheon.")
+    (license license:gpl3)))
+
+(define-public elementary-greeter
+  (package
+    (name "elementary-greeter")
+    (version "5.0.3")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append "https://github.com/elementary/greeter/archive/"
+                                  version ".tar.gz"))
+              (sha256 (base32
+                       "0jdqf5zxyzjz6kqvvmwy61fikdf7nqxjxbzq9fvpqg35m20rzg3f"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:configure-flags
+       `("-Dubuntu-patched-gsd=false"
+         ,(string-append "-Dgsd-dir="
+                         (assoc-ref %build-inputs "gnome-settings-daemon")
+                         "/libexec/"))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)
+       ("gettext" ,gettext-minimal)
+       ("desktop-file-utils" ,desktop-file-utils)
+       ("gobject-introspection" ,gobject-introspection)
+       ;; ("libxml2" ,libxml2)
+       ("glib:bin" ,glib "bin")
+       ("gtk+:bin" ,gtk+ "bin")))
+    (inputs
+     `(("granite" ,granite)
+       ("gdk-pixbuf" ,gdk-pixbuf)
+       ("xorg-server" ,xorg-server)
+       ("lightdm" ,lightdm)
+       ("gnome-settings-daemon" ,gnome-settings-daemon)
+       ("accountsservice" ,accountsservice)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("mutter" ,mutter)))
     (home-page "https://github.com/elementary/gala")
     (synopsis "Window Manager from elementary OS")
     (description "A window & compositing manager
