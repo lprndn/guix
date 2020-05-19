@@ -27,17 +27,21 @@
   #:use-module (gnu packages gettext)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
+  #:use-module (gnu packages gstreamer)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages image)
   #:use-module (gnu packages inkscape)
   #:use-module (gnu packages libcanberra)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages package-management)
+  #:use-module (gnu packages photo)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages polkit)
   #:use-module (gnu packages pulseaudio)
   #:use-module (gnu packages python)
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages sync)
+  #:use-module (gnu packages webkit)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages xorg)
   #:use-module (gnu packages xml)
@@ -579,6 +583,55 @@ for elementary OS and its desktop environment: Pantheon.")
     (synopsis "File browser designed for elementary OS")
     (description "File browser app designed for elementary OS.")
     (license license:gpl3)))
+
+(define-public elementary-photos
+  (package
+    (name "elementary-photos")
+    (version "2.7.0")
+    (source (origin
+              (method url-fetch)
+              (uri
+              (string-append
+               "https://github.com/elementary/photos/archive/"
+               version ".tar.gz"))
+              (sha256 (base32
+                       "0x50araj2grc7jkrg1l782gfi77yk915kz67ksdj7qsks04x8slz"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:glib-or-gtk? #t
+       #:configure-flags
+       (list "-Dlibunity=false"
+             "-Dplugins=true")))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("goject-introspection" ,gobject-introspection)
+       ("desktop-file-utils" ,desktop-file-utils)
+       ("gettext" ,gettext-minimal)
+       ("glib:bin" ,glib "bin")
+       ("appstream" ,appstream)
+       ("vala" ,vala)))
+    (inputs
+     `(("geocode-glib" ,geocode-glib)
+       ("gexiv2" ,gexiv2)
+       ("gstreamer" ,gstreamer)
+       ("gst-plugins-base" ,gst-plugins-base)
+       ("granite" ,granite)
+       ("json-glib" ,json-glib)
+       ("libexif" ,libexif)
+       ("libgphoto2" ,libgphoto2)
+       ("libgudev" ,libgudev)
+       ("libraw" ,libraw)
+       ("libsoup" ,libsoup)
+       ("libwebp" ,libwebp)
+       ("rest" ,rest)
+       ("webkitgtk" ,webkitgtk)
+       ("gtk+" ,gtk+)
+       ("libgee" ,libgee)
+       ("sqlite" ,sqlite)))
+    (home-page "https://github.com/elementary/photos")
+    (synopsis "Photo viewer and organizer designed for elementary OS")
+    (description "Photo viewer and organizer designed for elementary OS.")
+    (license license:lgpl2.1+)))
 
 (define-public elementary-screenshot
   (package
