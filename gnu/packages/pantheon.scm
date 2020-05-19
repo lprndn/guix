@@ -50,6 +50,7 @@
   #:use-module (guix build-system glib-or-gtk)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system meson)
+  #:use-module (guix build-system trivial)
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module ((guix licenses) :prefix license:)
@@ -1943,3 +1944,94 @@ which provide the actual settings for various hardware and software.")
       (description "elementary tweaks is a system settings panel for elementary OS
 that lets you easily and safely customise your desktop's appearance")
       (license license:gpl3+))))
+
+(define-public pantheon
+  (package
+    (name "pantheon")
+    (version "5.1.4")                   ; Hera April 2020
+    (source #f)
+    (build-system trivial-build-system)
+    (arguments `(#:builder (begin (mkdir %output) #t)))
+    (propagated-inputs
+     `(
+       ;; Generic services
+       ("accountsservice" ,accountsservice)
+       ("network-manager" ,network-manager)
+       ("evolution-data-server" ,evolution-data-server)
+       ("gnome-settings-daemon" ,gnome-settings-daemon)
+       ("upower" ,upower)
+       ("bamf" ,bamf)
+       ;; Specific services
+       ("contractor" ,contractor)
+       ("pantheon-agent-geoclue2" ,pantheon-agent-geoclue2)
+       ("pantheon-agent-polkit" ,pantheon-agent-polkit)
+       ("elementary-dpms-helper" ,elementary-dpms-helper)
+       ("elementary-print-shim" ,elementary-print-shim)
+       ("capnet-assist" ,capnet-assist)
+       ;; Themes
+       ("elementary-gtk-theme" ,elementary-gtk-theme)
+       ("elementary-icon-theme" ,elementary-icon-theme)
+       ("elementary-sound-theme" ,elementary-sound-theme)
+       ("elementary-wallpapers" ,elementary-wallpapers)
+       ;; Apps
+       ("elementary-files" ,elementary-files)
+       ("pantheon-calculator" ,pantheon-calculator)
+       ("pantheon-terminal" ,pantheon-terminal)
+       ("elementary-photos" ,elementary-photos)
+       ("elementary-calendar" ,elementary-calendar)
+       ("elementary-screenshot" ,elementary-screenshot)
+       ("geary" ,geary)
+       ;; Switchboard
+       ("switchboard" ,switchboard)
+       ("switchboard-plug-pantheon-shell"
+        ,switchboard-plug-pantheon-shell)
+       ("switchboard-plug-network" ,switchboard-plug-network)
+       ("switchboard-plug-display" ,switchboard-plug-display)
+       ("switchboard-plug-power" ,switchboard-plug-power)
+       ("switchboard-plug-mouse-touchpad" ,switchboard-plug-mouse-touchpad)
+       ("switchboard-plug-about" ,switchboard-plug-about)
+       ("switchboard-plug-sound" ,switchboard-plug-sound)
+       ("switchboard-plug-keyboard" ,switchboard-plug-keyboard)
+       ("switchboard-plug-notifications" ,switchboard-plug-notifications)
+       ("switchboard-plug-bluetooth" ,switchboard-plug-bluetooth)
+       ("switchboard-plug-a11y" ,switchboard-plug-a11y)
+       ("switchboard-plug-datetime" ,switchboard-plug-datetime)
+       ("switchboard-plug-security-privacy" ,switchboard-plug-security-privacy)
+       ("switchboard-plug-printers" ,switchboard-plug-printers)
+       ("switchboard-plug-sharing" ,switchboard-plug-sharing)
+       ;; Desktop
+       ("gala" ,gala)
+       ("plank" ,plank)
+       ("elementary-shortcut-overlay" ,elementary-shortcut-overlay)
+       ("elementary-session-settings" ,elementary-session-settings)
+       ;; Wingpanel
+       ("wingpanel" ,wingpanel)
+       ("wingpanel-indicator-sound" ,wingpanel-indicator-sound)
+       ("wingpanel-indicator-network" ,wingpanel-indicator-network)
+       ("wingpanel-indicator-datetime" ,wingpanel-indicator-datetime)
+       ("wingpanel-indicator-power" ,wingpanel-indicator-power)
+       ("wingpanel-indicator-session" ,wingpanel-indicator-session)
+       ("wingpanel-indicator-keyboard" ,wingpanel-indicator-keyboard)
+       ("wingpanel-indicator-bluetooth" ,wingpanel-indicator-bluetooth)
+       ("wingpanel-applications-menu" ,wingpanel-applications-menu)
+       ("wingpanel-indicator-notifications" ,wingpanel-indicator-notifications)
+       ;; Probably needed. Inspired by NixOS.
+       ("at-spi2-core" ,at-spi2-core)
+       ("dconf" ,dconf)
+       ("shared-mime-info" ,shared-mime-info)
+       ("desktop-file-utils", desktop-file-utils)
+       ("hicolor-icon-theme" ,hicolor-icon-theme)
+       ("dbus" ,dbus)
+       ("gvfs" ,gvfs)))
+    (home-page "https://elementary.io/")
+    (synopsis "Desktop environment from elementaryOS")
+    (description "")
+    ;; TODO find a better way
+    (license (list license:gpl3
+                   license:gpl2
+                   license:gpl3+
+                   license:gpl2+
+                   license:lgpl2.1
+                   license:lgpl2.1+
+                   license:lgpl3
+                   license:lgpl3+))))
