@@ -433,6 +433,28 @@ when GNOME Settings Daemon is not managing the related settings.")
       (description "A desktop-wide extension service used by elementary OS.")
       (license license:gpl3+))))
 
+(define-public elementary-print-shim
+  (package
+    (name "elementary-print-shim")
+    (version "0.1.3")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/print/archive/"
+                    version ".tar.gz"))
+              (sha256
+               (base32 "09f0ayf22ibzg1qyk9lf52csgvm3zivjfg38bx5riw08fz55c9mz"))))
+    (build-system meson-build-system)
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("vala" ,vala)))
+    (inputs
+     `(("gtk+" ,gtk+)))
+    (home-page "https://github.com/elementary/print")
+    (synopsis "Simple shim for printing support via Contractor")
+    (description "Simple shim for printing support via Contractor ")
+    (license license:gpl3+)))
+
 (define-public elementary-wallpapers
   (package
     (name "elementary-wallpapers")
