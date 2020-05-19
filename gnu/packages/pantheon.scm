@@ -503,6 +503,27 @@ for elementary OS and its desktop environment: Pantheon.")
  specifically for elementary OS and its desktop environment: Pantheon.")
     (license license:gpl3)))
 
+(define-public elementary-sound-theme
+  (package
+    (name "elementary-sound-theme")
+    (version "1.0")
+    (source (origin
+              (method git-fetch)
+              (file-name (git-file-name name version))
+              (uri (git-reference
+                    (url "https://github.com/elementary/sound-theme.git")
+                    (commit "5519eaffa7cd018a00e9b1e3a7da1c6e13fbd53b")))
+              (sha256 (base32
+                       "1dc583lq61c361arjl3s44d2k72c46bqvcqv1c3s69f2ndsnxjdz"))))
+    (build-system meson-build-system)
+    (native-inputs
+     `(("pkg-config" ,pkg-config)))
+    (home-page "https://github.com/elementary/sound-theme")
+    (synopsis "Set of system sounds for elementary OS")
+    (description "A set of system sounds for elementary OS.
+Designed to be light, natural/physical, and pleasant.")
+    (license license:unlicense)))
+
 (define-public elementary-calendar
   (package
     (name "elementary-calendar")
