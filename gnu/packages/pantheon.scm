@@ -455,6 +455,46 @@ when GNOME Settings Daemon is not managing the related settings.")
     (description "Simple shim for printing support via Contractor ")
     (license license:gpl3+)))
 
+(define-public capnet-assist
+  (package
+    (name "capnet-assist")
+    (version "2.2.5")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                    "https://github.com/elementary/capnet-assist/archive/"
+                    version ".tar.gz"))
+              (sha256
+               (base32 "1l614nipb1w33dsnbjvdlny8iwvm1sl8m6jrn9sxjmj41m4iy4g5"))))
+    (build-system meson-build-system)
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         ;; https://github.com/elementary/capnet-assist/issues/3
+         (add-after 'unpack 'dump-test
+           (lambda _
+             (substitute* "meson.build"
+               (("get_option\\('sysconfdir'\\)")
+                "'tmp'"))
+             #t)))))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("gettext" ,gettext-minimal)
+       ("vala" ,vala)
+       ("glib:bin" ,glib "bin")))       ;glib-compile-schemas
+    (inputs
+     `(("granite" ,granite)
+       ("libgee" ,libgee)
+       ("gtk+" ,gtk+)
+       ("gcr" ,gcr)
+       ("webkitgtk" ,webkitgtk)))
+    (home-page "https://github.com/elementary/capnet-assist")
+    (synopsis "Captive Portal Assistant")
+    (description "Log into captive portals—like Wi-Fi networks at coffee shops,
+airports, and trains—with ease. Captive Network Assistant automatically opens to
+help you get connected.")
+    (license license:gpl2+)))
+
 (define-public elementary-wallpapers
   (package
     (name "elementary-wallpapers")
